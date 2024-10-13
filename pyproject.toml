@@ -25,6 +25,7 @@ dependencies = [
     "geometric",
     "importlib-resources",
     "numpy",
+    "seamm-util",
     "tabulate",
 ]
 
