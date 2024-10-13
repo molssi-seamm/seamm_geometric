@@ -1,0 +1,15 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+    branches:
+      - "main"
+
+jobs:
+  release:
+    name: Release
+    uses: molssi-seamm/devops/.github/workflows/Release.yaml@main
+    with:
+      src : seamm_ase
+    secrets: inherit
