@@ -8,6 +8,11 @@ dependencies:
   - python
   - pip
 
+  - bibtexparser
+  - geometric
+  - numpy
+  - tabulate
+  
   # Testing
   - black
   - codecov
@@ -21,7 +26,6 @@ dependencies:
 
   # Pip-only installs
   - pip:
-      - ase
       # Documentation
       - sphinx-copybutton
 
