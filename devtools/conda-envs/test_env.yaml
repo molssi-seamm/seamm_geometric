@@ -11,7 +11,7 @@ dependencies:
   - bibtexparser
   - geometric
   - numpy
-  - seamm_util
+  - seamm-util
   - tabulate
   
   # Testing
