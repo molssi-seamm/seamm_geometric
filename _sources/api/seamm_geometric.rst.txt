@@ -1,0 +1,21 @@
+seamm\_geometric package
+========================
+
+Submodules
+----------
+
+seamm\_geometric.seamm\_geometric module
+----------------------------------------
+
+.. automodule:: seamm_geometric.seamm_geometric
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: seamm_geometric
+   :members:
+   :undoc-members:
+   :show-inheritance:
