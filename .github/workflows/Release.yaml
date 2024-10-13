@@ -11,5 +11,5 @@ jobs:
     name: Release
     uses: molssi-seamm/devops/.github/workflows/Release.yaml@main
     with:
-      src : seamm_ase
+      src : seamm_geometric
     secrets: inherit
