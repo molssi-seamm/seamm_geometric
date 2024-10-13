@@ -1,4 +1,4 @@
 User Guide
 ===============
 
-This page details how to use SEAMM-ASE. 
+This page details how to use SEAMM-geomeTRIC. 

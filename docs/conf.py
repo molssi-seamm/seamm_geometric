@@ -17,12 +17,12 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import seamm_ase
+import seamm_geometric
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'SEAMM-ASE Connector'
+project = 'SEAMM-geomeTRIC Connector'
 copyright = (
     u"2024, Molecular Sciences Software Institute (MolSSI) "
     "Project structure based on the "
@@ -31,9 +31,9 @@ copyright = (
 author = 'Paul Saxe'
 
 # The short X.Y version
-version = seamm_ase.__version__
+version = seamm_geometric.__version__
 # The full version, including alpha/beta/rc tags
-release = seamm_ase.__version__
+release = seamm_geometric.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -106,7 +106,7 @@ html_theme = 'pydata_sphinx_theme'
 #
 # html_theme_options = {}
 html_theme_options = {
-    "github_url": "https://github.com/molssi-seamm/seamm_ase",
+    "github_url": "https://github.com/molssi-seamm/seamm_geometric",
     "twitter_url": "https://twitter.com/MolSSI_NSF",
     "icon_links": [],
     "logo": {
@@ -159,7 +159,7 @@ html_show_copyright = False
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'seamm_asedoc'
+htmlhelp_basename = 'seamm_geometricdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -186,8 +186,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'seamm_ase.tex', 'SEAMM-ASE Documentation',
-     'seamm_ase', 'manual'),
+    (master_doc, 'seamm_geometric.tex', 'SEAMM-geomeTRIC Documentation',
+     'seamm_geometric', 'manual'),
 ]
 
 
@@ -196,7 +196,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'seamm_ase', 'SEAMM-ASE Documentation',
+    (master_doc, 'seamm_geometric', 'SEAMM-geomeTRIC Documentation',
      [author], 1)
 ]
 
@@ -207,8 +207,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'seamm_ase', 'SEAMM-ASE Documentation',
-     author, 'seamm_ase', 'Connector between SEAMM and ASE',
+    (master_doc, 'seamm_geometric', 'SEAMM-geomeTRIC Documentation',
+     author, 'seamm_geometric', 'Connector between SEAMM and geomeTRIC',
      'Miscellaneous'),
 ]
 

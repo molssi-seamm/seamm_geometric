@@ -1,4 +1,4 @@
 Developer Guide
 ===============
 
-This page details how to contribute to SEAMM-ASE. 
+This page details how to contribute to SEAMM-geomeTRIC. 

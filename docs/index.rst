@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to SEAMM-ASE's documentation!
+Welcome to SEAMM-geomeTRIC's documentation!
 =========================================================
 
 .. grid:: 1 1 2 2
@@ -11,7 +11,7 @@ Welcome to SEAMM-ASE's documentation!
     .. grid-item-card:: Getting Started
       :margin: 0 3 0 0
       
-      Learn the basics of using SEAMM-ASE.
+      Learn the basics of using SEAMM-geomeTRIC.
 
       .. button-link:: ./getting_started.html
          :color: primary
@@ -39,7 +39,7 @@ Welcome to SEAMM-ASE's documentation!
     .. grid-item-card:: API Reference
       :margin: 0 3 0 0
       
-      How to use the API of SEAMM-ASE.
+      How to use the API of SEAMM-geomeTRIC.
 
       .. button-link:: ./api.html
          :color: primary
@@ -53,7 +53,7 @@ Welcome to SEAMM-ASE's documentation!
     .. grid-item-card::  Developer Guide
       :margin: 0 3 0 0
       
-      How to contribute to SEAMM-ASE.
+      How to contribute to SEAMM-geomeTRIC.
 
       .. button-link:: ./developer_guide.html
          :color: primary
