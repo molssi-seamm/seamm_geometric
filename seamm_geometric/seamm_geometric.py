@@ -140,9 +140,9 @@ class geomeTRIC_mixin:
         n_atoms = self._working_configuration.n_atoms
 
         if self.logger.isEnabledFor(logging.DEBUG):
-            print("\nnew coordinates")
+            self.logger.debug("\nnew coordinates")
             for i in range(n_atoms):
-                print(
+                self.logger.debug(
                     f"   {coordinates[i][0]:8.3f} {coordinates[i][1]:8.3f} "
                     f"{coordinates[i][2]:8.3f}"
                 )
@@ -213,6 +213,7 @@ class geomeTRIC_mixin:
             traceback.print_exc(file=sys.stdout)
         except Exception as e:
             printer.job(f"Caught exception in step {self.step}: {str(e)}")
+            traceback.print_exc(file=sys.stdout)
             with open(step_dir / "stderr.out", "a") as fd:
                 traceback.print_exc(file=fd)
             raise
@@ -270,12 +271,29 @@ class geomeTRIC_mixin:
                 )
 
         if "gradients,units" in data:
-            units = data["gradients,units"]
+            funits = data["gradients,units"]
         else:
-            units = "kJ/mol/Å"
+            funits = "kJ/mol/Å"
+
+        # Get the measures of convergence
+        max_force = np.max(np.linalg.norm(gradients, axis=1))
+        self._data["max_force"].append(max_force)
+        self._results["maximum_gradient"] = Q_(max_force, funits).m_as("kJ/mol/Å")
+        rms_force = np.sqrt(np.mean(np.linalg.norm(gradients, axis=1) ** 2))
+        self._data["rms_force"].append(rms_force)
+        self._results["rms_gradient"] = Q_(rms_force, funits).m_as("kJ/mol/Å")
+
+        if self._step > 1:
+            step = coordinates - self._last_coordinates
+            max_step = np.max(np.linalg.norm(step, axis=1))
+        else:
+            max_step = 0.0
+        self._data["max_step"].append(max_step)
+        self._results["maximum_step"] = max_step
+        self._last_coordinates = np.array(coordinates)
 
         # Units!
-        gradients = np.array(gradients) * Q_(1.0, units).to("E_h/a_0").magnitude
+        gradients = np.array(gradients) * Q_(1.0, funits).to("E_h/a_0").magnitude
 
         return energy, gradients
 
@@ -309,7 +327,7 @@ class geomeTRIC_mixin:
 
         if target == "minimum":
             text = "The structure will be optimized"
-        elif target == "transition_state":
+        elif target == "transition state":
             text = "The transition state will be optimized"
         elif self.is_expr(target):
             text = (
@@ -320,7 +338,18 @@ class geomeTRIC_mixin:
             raise ValueError(f"Unknown target {target}")
 
         text += " using the geomeTRIC optimizer with {coordinate system}. "
-        text += "Convergence will be reached when "
+
+        if self.is_expr(P["calculate hessian"]):
+            text += (
+                "'{calculate hessian}' will determine whether and how often to "
+                "calculate the Hessian matrix."
+            )
+        elif P["calculate hessian"] != "never":
+            text += (
+                "The Hessian matrix will be calculated for {calculate hessian} step."
+            )
+
+        text += " Convergence will be reached when "
         tmp_text = ["\n"]
         criteria = (
             "energy change criterion",
@@ -350,7 +379,7 @@ class geomeTRIC_mixin:
                 tmp_text.append(line.center(70))
             criteria = formula["criteria"]
 
-        result = str(__(text, **P))
+        result = str(__(text, dedent=False, indent=3 * " ", **P))
         result += "\n".join(tmp_text)
 
         table = {
@@ -365,23 +394,10 @@ class geomeTRIC_mixin:
 
         tmp = tabulate(table, headers="keys", tablefmt="rounded_outline")
 
-        text = "\n"
-        text += "\n"
-        text += tmp
-        text += "\n"
-        text += "\n"
-        result += str(__(text, indent=8 * " ", wrap=False, dedent=False))
-
-        if self.is_expr(P["calculate hessian"]):
-            result += (
-                "\n\n'{calculate hession}'will determine whether and how often to "
-                "calculate the Hessian matrix."
-            )
-        elif P["calculate hessian"] != "never":
-            result += (
-                "\n\nThe Hessian matrix will be calculated for "
-                "{calculate hessian} step."
-            )
+        result += "\n"
+        result += str(__(tmp, indent=7 * " ", wrap=False))
+        result += "\n"
+        result += "\n"
 
         return result
 
@@ -395,6 +411,16 @@ class geomeTRIC_mixin:
         PP : dict
             The current values of the parameters, formatted for printing
         """
+        self._data = {
+            "step": [],
+            "energy": [],
+            "max_force": [],
+            "rms_force": [],
+            "max_step": [],
+        }
+        self._last_coordinates = None
+        self._step = 0
+
         # Create the directory
         directory = Path(self.directory)
         self._working_directory = directory / "geomeTRIC"
@@ -487,7 +513,7 @@ format=%(message)s
             "maxiter": max_steps,
             "hessian": P["calculate hessian"],
             "frequency": P["calculate hessian"] != "never",
-            "transition": P["target"] == "Transition state",
+            "transition": "transition" in P["target"].lower(),
             "coordsys": coordsys,
         }
 
