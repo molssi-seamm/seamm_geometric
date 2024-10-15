@@ -10,4 +10,4 @@ jobs:
     name: Branch CI
     uses: molssi-seamm/devops/.github/workflows/BranchCI.yaml@main
     with:
-      src : seamm_ase
+      src : seamm_geometric
