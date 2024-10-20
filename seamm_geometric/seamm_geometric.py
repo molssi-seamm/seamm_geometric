@@ -10,7 +10,6 @@ import logging
 import math
 import os
 from pathlib import Path
-import pprint
 import re
 import shutil
 import string
@@ -39,7 +38,7 @@ from ._version import __version__  # noqa: F401
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
-printer = printing.getPrinter("goemeTRIC")
+printer = printing.getPrinter("geomeTRIC")
 
 # Regexp to remove ansi escape sequences
 ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
@@ -96,7 +95,7 @@ class SEAMMEngine(geometric.engine.Engine):
         """
         xyz = coords.reshape(-1, 3) * Q_(1.0, "a_0").m_as("angstrom")
 
-        energy, gradient = self.step.calculate_gradients(xyz)
+        energy, gradient = self.step.geometric_calculate_gradients(xyz)
 
         return {"energy": energy, "gradient": gradient.ravel()}
 
@@ -104,30 +103,14 @@ class SEAMMEngine(geometric.engine.Engine):
 class geomeTRIC_mixin:
     """A mixin class for running a geomeTRIC optimization."""
 
-    def read_bibliography(self):
-        """Read the bibliography from a file and add to the local bibliography"""
-        if "geomeTRIC" not in self._bibliography:
-            try:
-                data = (
-                    files("seamm_geometric.data").joinpath("references.bib").read_text()
-                )
-                tmp = bibtexparser.loads(data).entries_dict
-                writer = bibtexparser.bwriter.BibTexWriter()
-                for key, data in tmp.items():
-                    self.logger.info(f"      {key}")
-                    self._bibliography[key] = writer._entry_to_bibtex(data)
-                self.logger.debug("Bibliography\n" + pprint.pformat(self._bibliography))
-            except Exception:
-                pass
-
-    def calculate_gradients(self, coordinates):
+    def geometric_calculate_gradients(self, coordinates):
         """Given the new coordinates, calculate the energy and gradients.
 
         Parameters
         ----------
         coordinates : [3, n_atoms] array of coordinates
         """
-        self.step = self.step + 1
+        self._step = self._step + 1
         fmt = "05d"
 
         # Make the geometric output readable by removing the ANSI escape sequences
@@ -181,7 +164,7 @@ class geomeTRIC_mixin:
         self.subflowchart.executor = self.flowchart.executor
 
         # Direct most output to iteration.out
-        step_id = f"step_{self.step:{fmt}}"
+        step_id = f"step_{self._step:{fmt}}"
         step_dir = Path(self._working_directory) / step_id
         step_dir.mkdir(parents=True, exist_ok=True)
 
@@ -212,12 +195,12 @@ class geomeTRIC_mixin:
             traceback.print_exc(file=sys.stderr)
             traceback.print_exc(file=sys.stdout)
         except Exception as e:
-            printer.job(f"Caught exception in step {self.step}: {str(e)}")
+            printer.job(f"Caught exception in step {self._step}: {str(e)}")
             traceback.print_exc(file=sys.stdout)
             with open(step_dir / "stderr.out", "a") as fd:
                 traceback.print_exc(file=fd)
             raise
-        self.logger.debug(f"End of step {self.step}")
+        self.logger.debug(f"End of step {self._step}")
 
         # Remove any redirection of printing.
         if self._file_handler is not None:
@@ -235,7 +218,7 @@ class geomeTRIC_mixin:
         if len(paths) == 0:
             raise RuntimeError(
                 "There are no energy and gradients in properties.json for step "
-                f"{self.step} in {step_dir}."
+                f"{self._step} in {step_dir}."
             )
         else:
             # Find the most recent and assume that is the one wanted
@@ -294,6 +277,17 @@ class geomeTRIC_mixin:
 
         # Units!
         gradients = np.array(gradients) * Q_(1.0, funits).to("E_h/a_0").magnitude
+
+        # Citation!
+        self.geometric_read_bibliography()
+        if "seamm_geometric" in self._bibliography:
+            self.references.cite(
+                raw=self._bibliography["seamm_geometric"],
+                alias="seamm_geometric",
+                module="seamm_geometric",
+                level=2,
+                note="Main reference for the geomeTRIC connector for SEAMM.",
+            )
 
         return energy, gradients
 
@@ -379,7 +373,7 @@ class geomeTRIC_mixin:
                 tmp_text.append(line.center(70))
             criteria = formula["criteria"]
 
-        result = str(__(text, dedent=False, indent=3 * " ", **P))
+        result = str(__(text, dedent=False, indent=4 * " ", **P))
         result += "\n".join(tmp_text)
 
         table = {
@@ -400,6 +394,49 @@ class geomeTRIC_mixin:
         result += "\n"
 
         return result
+
+    def geometric_read_bibliography(self):
+        """Read the bibliography from a file and add to the local bibliography"""
+        self.logger.debug("Reading the seamm_geometric bibliography")
+        if "seamm-geometric" not in self._bibliography:
+            try:
+                data = (
+                    files("seamm_geometric.data").joinpath("references.bib").read_text()
+                )
+                tmp = bibtexparser.loads(data).entries_dict
+                writer = bibtexparser.bwriter.BibTexWriter()
+                for key, data in tmp.items():
+                    self.logger.debug(f"      {key}")
+                    self._bibliography[key] = writer._entry_to_bibtex(data)
+            except Exception as e:
+                self.logger.info(
+                    f"Exception in reading seamm_geometric bibliography: {e}"
+                )
+        if "seamm_geometric" in self._bibliography:
+            try:
+                template = string.Template(self._bibliography["seamm_geometric"])
+
+                if "untagged" in __version__ or "unknown" in __version__:
+                    # Development version
+                    year = datetime.now().year
+                    month = datetime.now().month
+                else:
+                    year, month = __version__.split(".")[0:2]
+                try:
+                    month = calendar.month_abbr[int(month)].lower()
+                except Exception:
+                    year = datetime.now().year
+                    month = datetime.now().month
+                    month = calendar.month_abbr[int(month)].lower()
+
+                citation = template.substitute(
+                    month=month, version=__version__, year=str(year)
+                )
+
+                self._bibliography["seamm_geometric"] = citation
+            except Exception as e:
+                printer.important(f"Exception in citation {type(e)}: {e}")
+                printer.important(traceback.format_exc())
 
     def run_geomeTRIC_optimizer(self, P, PP):
         """Run an optimization using geomeTRIC.
@@ -473,7 +510,7 @@ class geomeTRIC_mixin:
         else:
             max_steps = P["max steps"]
 
-        self.step = 0
+        self._step = 0
         logPath = self._working_directory / "geomeTRIC.out"
         logIni = self._working_directory / "log.ini"
         logIni.write_text(
@@ -594,8 +631,6 @@ format=%(message)s
         step = coordinates - m.xyzs[-2].reshape(-1, 3)
         self._results["maximum_step"] = np.max(np.linalg.norm(step, axis=1))
 
-        self.analyze()
-
         if self.logger.isEnabledFor(logging.DEBUG):
             logger.debug("optimized coordinates")
             for i in range(n_atoms):
@@ -650,47 +685,13 @@ format=%(message)s
                 for subdirectory in subdirectories[:-1]:
                     shutil.rmtree(subdirectory)
 
-        # Citation!
-        self.read_bibliography()
-        self.references.cite(
-            raw=self._bibliography["geomeTRIC"],
-            alias="geomeTRIC",
-            module="seamm_geometric",
-            level=1,
-            note="Main reference for geomeTRIC.",
-        )
-
-        if "seamm_geometric" in self._bibliography:
-            try:
-                template = string.Template(self._bibliography["seamm_geometric"])
-
-                if "untagged" in __version__ or "unknown" in __version__:
-                    # Development version
-                    year = datetime.now().year
-                    month = datetime.now().month
-                else:
-                    year, month = __version__.split(".")[0:2]
-                try:
-                    month = calendar.month_abbr[int(month)].lower()
-                except Exception:
-                    year = datetime.now().year
-                    month = datetime.now().month
-                    month = calendar.month_abbr[int(month)].lower()
-
-                citation = template.substitute(
-                    month=month, version=__version__, year=str(year)
-                )
-
-                title = "seamm_geometric".split("_")
-                title = " ".join([s.capitalize() for s in title[0:-2]])
-                self.references.cite(
-                    raw=citation,
-                    alias="seamm_geometric",
-                    module="seamm_geometric",
-                    level=self.citation_level,
-                    note=(f"The principle citation for the {title} step in " "SEAMM."),
-                )
-
-            except Exception as e:
-                printer.important(f"Exception in citation {type(e)}: {e}")
-                printer.important(traceback.format_exc())
+        # Citation
+        self.geometric_read_bibliography()
+        if "geomeTRIC" in self._bibliography:
+            self.references.cite(
+                raw=self._bibliography["geomeTRIC"],
+                alias="geomeTRIC",
+                module="seamm_geometric",
+                level=1,
+                note="Main reference for geomeTRIC.",
+            )
