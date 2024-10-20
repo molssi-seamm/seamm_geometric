@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>seamm_geometric package &#8212; SEAMM-geomeTRIC Connector 2024.10.15 documentation</title>
+    <title>seamm_geometric package &#8212; SEAMM-geomeTRIC Connector 2024.10.20 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=4ddceb86"></script>
+    <script src="../_static/documentation_options.js?v=b88505f4"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -519,17 +519,6 @@ Hartree/bohr as a 1-D Numpy array.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A mixin class for running a geomeTRIC optimization.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin.calculate_gradients">
-<span class="sig-name descname"><span class="pre">calculate_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin.calculate_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.calculate_gradients" title="Link to this definition">#</a></dt>
-<dd><p>Given the new coordinates, calculate the energy and gradients.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>coordinates</strong> (<em>[</em><em>3</em><em>, </em><em>n_atoms</em><em>] </em><em>array</em><em> of </em><em>coordinates</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin.describe_geomeTRIC_optimizer">
 <span class="sig-name descname"><span class="pre">describe_geomeTRIC_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin.describe_geomeTRIC_optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.describe_geomeTRIC_optimizer" title="Link to this definition">#</a></dt>
 <dd><p>Describe the geomeTRIC optimizer.</p>
@@ -552,8 +541,19 @@ parameters.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin.read_bibliography">
-<span class="sig-name descname"><span class="pre">read_bibliography</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin.read_bibliography"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.read_bibliography" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_calculate_gradients">
+<span class="sig-name descname"><span class="pre">geometric_calculate_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin.geometric_calculate_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_calculate_gradients" title="Link to this definition">#</a></dt>
+<dd><p>Given the new coordinates, calculate the energy and gradients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coordinates</strong> (<em>[</em><em>3</em><em>, </em><em>n_atoms</em><em>] </em><em>array</em><em> of </em><em>coordinates</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_read_bibliography">
+<span class="sig-name descname"><span class="pre">geometric_read_bibliography</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin.geometric_read_bibliography"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_read_bibliography" title="Link to this definition">#</a></dt>
 <dd><p>Read the bibliography from a file and add to the local bibliography</p>
 </dd></dl>
 
@@ -633,9 +633,9 @@ parameters.</p></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.calculate_gradients"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.calculate_gradients()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.describe_geomeTRIC_optimizer"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.describe_geomeTRIC_optimizer()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.read_bibliography"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.read_bibliography()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_calculate_gradients"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.geometric_calculate_gradients()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.geometric_read_bibliography"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.geometric_read_bibliography()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin.run_geomeTRIC_optimizer"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin.run_geomeTRIC_optimizer()</span></code></a></li>
 </ul>
 </li>
