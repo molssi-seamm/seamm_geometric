@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.2.7: Bugfix: issues continuing of not converged
+    * There was an error continuing if the user requested to continue if the
+      optimization did not converge.
+      
 2024.10.20 -- Improved citation handling
 
 2024.10.15 -- Added various convergence metrics to results
