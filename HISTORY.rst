@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.5.7 -- Enhancement: Gracefully handle convergence failure
+    * Return the latest energy and structure when optimization fails to converge,
+      rather than forcing an error.
+      
 2024.10.20 -- Improved citation handling
 
 2024.10.15 -- Added various convergence metrics to results

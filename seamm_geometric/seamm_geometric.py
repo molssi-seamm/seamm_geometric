@@ -72,6 +72,10 @@ class SEAMMEngine(geometric.engine.Engine):
             The geomeTRIC molecule to work with
         """
         self.step = step
+        self.energy = None
+        self.gradient = None
+        self.xyz = None
+
         super().__init__(molecule)
 
     def calc_new(self, coords, dirname):
@@ -94,10 +98,17 @@ class SEAMMEngine(geometric.engine.Engine):
                 Hartree/bohr as a 1-D Numpy array.
         """
         xyz = coords.reshape(-1, 3) * Q_(1.0, "a_0").m_as("angstrom")
+        self.xyz = list(xyz)
 
         energy, gradient = self.step.geometric_calculate_gradients(xyz)
+        self.energy = energy
+        self.gradient = gradient
 
         return {"energy": energy, "gradient": gradient.ravel()}
+
+    def copy_scratch(self, src, dest):
+        # Do nothing.
+        return
 
 
 class geomeTRIC_mixin:
@@ -501,14 +512,14 @@ class geomeTRIC_mixin:
         max_steps = P["max steps"]
         if max_steps == "default":
             max_steps = 12 * n_atoms
-        elif "natoms" in max_steps:
+        elif isinstance(max_steps, str) and "natoms" in max_steps:
             tmp = max_steps.split()
             if "natoms" in tmp[0]:
                 max_steps = int(tmp[1]) * n_atoms
             else:
                 max_steps = int(tmp[0]) * n_atoms
         else:
-            max_steps = P["max steps"]
+            max_steps = int(P["max steps"])
 
         self._step = 0
         logPath = self._working_directory / "geomeTRIC.out"
@@ -602,6 +613,7 @@ format=%(message)s
                     **kwargs,
                 )
             except geometric.errors.GeomOptNotConvergedError:
+                print("geomeTRIC did not converge!")
                 converged = False
             except Exception as exception:  # noqa: F841
                 print(exception)
@@ -618,18 +630,30 @@ format=%(message)s
             logPath.write_text(text)
 
         # Get the optimized energy & geometry
-        self._results["energy"] = (
-            m.qm_energies[-1] * Q_(1.0, "E_h").to("kJ/mol").magnitude
-        )
-        coordinates = m.xyzs[-1].reshape(-1, 3)
-        gradients = m.qm_grads[-1].reshape(-1, 3)
+        if converged:
+            self._results["energy"] = (
+                m.qm_energies[-1] * Q_(1.0, "E_h").to("kJ/mol").magnitude
+            )
+            coordinates = m.xyzs[-1].reshape(-1, 3)
+            gradients = m.qm_grads[-1].reshape(-1, 3)
+            self._results["nsteps"] = len(m.qm_energies) - 1
+        else:
+            self._results["energy"] = (
+                customengine.energy * Q_(1.0, "E_h").to("kJ/mol").magnitude
+            )
+            coordinates = customengine.xyz
+            gradients = customengine.gradient
+            self._results["nsteps"] = max_steps
+
         self._results["maximum_gradient"] = np.max(np.linalg.norm(gradients, axis=1))
         self._results["rms_gradient"] = np.sqrt(
             np.mean(np.linalg.norm(gradients, axis=1) ** 2)
         )
-        self._results["nsteps"] = len(m.qm_energies) - 1
-        step = coordinates - m.xyzs[-2].reshape(-1, 3)
-        self._results["maximum_step"] = np.max(np.linalg.norm(step, axis=1))
+        if converged:
+            step = coordinates - m.xyzs[-2].reshape(-1, 3)
+            self._results["maximum_step"] = np.max(np.linalg.norm(step, axis=1))
+        else:
+            self._results["maximum_step"] = 0
 
         if self.logger.isEnabledFor(logging.DEBUG):
             logger.debug("optimized coordinates")
