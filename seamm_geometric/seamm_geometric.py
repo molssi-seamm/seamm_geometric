@@ -565,7 +565,9 @@ format=%(message)s
             "coordsys": coordsys,
         }
         cont = P["continue if not converged"]
-        if (isinstance(cont, str) and cont == "yes") or (isinstance(cont, bool) and cont):
+        if (isinstance(cont, str) and cont == "yes") or (
+            isinstance(cont, bool) and cont
+        ):
             kwargs["convergence"] = ["maxiter"]
             kwargs["Converge_maxiter"] = True
 
