@@ -564,6 +564,12 @@ format=%(message)s
             "transition": "transition" in P["target"].lower(),
             "coordsys": coordsys,
         }
+        cont = P["continue if not converged"]
+        if (isinstance(cont, str) and cont == "yes") or (
+            isinstance(cont, bool) and cont
+        ):
+            kwargs["convergence"] = ["maxiter"]
+            kwargs["Converge_maxiter"] = True
 
         convergence_formulas = self.metadata["convergence formulas"]
 
