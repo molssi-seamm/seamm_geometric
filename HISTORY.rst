@@ -1,9 +1,9 @@
 =======
 History
 =======
-2025.2.7: Bugfix: issues continuing of not converged
-    * There was an error continuing if the user requested to continue if the
-      optimization did not converge.
+2025.5.7 -- Enhancement: Gracefully handle convergence failure
+    * Return the latest energy and structure when optimization fails to converge,
+      rather than forcing an error.
       
 2024.10.20 -- Improved citation handling
 
