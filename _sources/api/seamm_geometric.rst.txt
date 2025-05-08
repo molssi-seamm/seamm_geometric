@@ -9,13 +9,13 @@ seamm\_geometric.seamm\_geometric module
 
 .. automodule:: seamm_geometric.seamm_geometric
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: seamm_geometric
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:

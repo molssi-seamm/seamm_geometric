@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>seamm_geometric package &#8212; SEAMM-geomeTRIC Connector 2025.2.7 documentation</title>
+    <title>seamm_geometric package &#8212; SEAMM-geomeTRIC Connector 2025.5.7 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=3c0199e2"></script>
+    <script src="../_static/documentation_options.js?v=b25a682c"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,7 +54,7 @@
     <link rel="prev" title="seamm_geometric" href="modules.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.2.7" />
+  <meta name="docsearch:version" content="2025.5.7" />
   </head>
   
   
@@ -463,7 +463,7 @@
 <span id="seamm-geometric-seamm-geometric-module"></span><h2>seamm_geometric.seamm_geometric module<a class="headerlink" href="#module-seamm_geometric.seamm_geometric" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.SEAMMEngine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">seamm_geometric.seamm_geometric.</span></span><span class="sig-name descname"><span class="pre">SEAMMEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#SEAMMEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.SEAMMEngine" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">seamm_geometric.seamm_geometric.</span></span><span class="sig-name descname"><span class="pre">SEAMMEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#SEAMMEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.SEAMMEngine" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></p>
 <p>Helper class that is a geomeTRIC engine and connects to SEAMM.</p>
 <dl class="py method">
@@ -493,11 +493,16 @@ Hartree/bohr as a 1-D Numpy array.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.SEAMMEngine.copy_scratch">
+<span class="sig-name descname"><span class="pre">copy_scratch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#SEAMMEngine.copy_scratch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.SEAMMEngine.copy_scratch" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="seamm_geometric.seamm_geometric.geomeTRIC_mixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">seamm_geometric.seamm_geometric.</span></span><span class="sig-name descname"><span class="pre">geomeTRIC_mixin</span></span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">seamm_geometric.seamm_geometric.</span></span><span class="sig-name descname"><span class="pre">geomeTRIC_mixin</span></span><a class="reference internal" href="../_modules/seamm_geometric/seamm_geometric.html#geomeTRIC_mixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A mixin class for running a geomeTRIC optimization.</p>
 <dl class="py method">
@@ -613,6 +618,7 @@ parameters.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-seamm_geometric.seamm_geometric">seamm_geometric.seamm_geometric module</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.SEAMMEngine"><code class="docutils literal notranslate"><span class="pre">SEAMMEngine</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.SEAMMEngine.calc_new"><code class="docutils literal notranslate"><span class="pre">SEAMMEngine.calc_new()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.SEAMMEngine.copy_scratch"><code class="docutils literal notranslate"><span class="pre">SEAMMEngine.copy_scratch()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seamm_geometric.seamm_geometric.geomeTRIC_mixin"><code class="docutils literal notranslate"><span class="pre">geomeTRIC_mixin</span></code></a><ul class="nav section-nav flex-column">
