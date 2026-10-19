@@ -449,6 +449,17 @@ class geomeTRIC_mixin:
                 printer.important(f"Exception in citation {type(e)}: {e}")
                 printer.important(traceback.format_exc())
 
+    def _clean_up_steps(self, keep):
+        """Remove the directories of the steps of a failed optimization, as asked:
+        "delete all subdirectories", "keep last subdirectory", or keep them all."""
+        wd = self._working_directory
+        if keep == "delete all subdirectories":
+            for subdirectory in wd.glob("step_*"):
+                shutil.rmtree(subdirectory)
+        elif keep == "keep last subdirectory":
+            for subdirectory in sorted(wd.glob("step_*"))[:-1]:
+                shutil.rmtree(subdirectory)
+
     def run_geomeTRIC_optimizer(self, P, PP):
         """Run an optimization using geomeTRIC.
 
@@ -524,8 +535,7 @@ class geomeTRIC_mixin:
         self._step = 0
         logPath = self._working_directory / "geomeTRIC.out"
         logIni = self._working_directory / "log.ini"
-        logIni.write_text(
-            f"""\
+        logIni.write_text(f"""\
 # The default logging configuration file for geomeTRIC
 # Modified to write to {logPath}
 
@@ -551,8 +561,7 @@ args=("{logPath}",)
 [formatter_formatter]
 format=%(message)s
 #format=%(asctime)s %(name)-12s %(levelname)-8s %(message)s
-"""
-        )
+""")
         cc_logger = logging.getLogger("cclib")
         cc_logger.setLevel(logging.WARNING)
 
@@ -621,8 +630,11 @@ format=%(message)s
             except geometric.errors.GeomOptNotConvergedError:
                 print("geomeTRIC did not converge!")
                 converged = False
-            except Exception as exception:  # noqa: F841
-                print(exception)
+            except Exception as e:
+                # Kept in its own variable: the name bound by "except ... as" is
+                # deleted at the end of the block
+                print(e)
+                exception = e
                 converged = False
 
         toc = time.perf_counter_ns()
@@ -634,6 +646,12 @@ format=%(message)s
             text = logPath.read_text()
             text = ansi_escape.sub("", text)
             logPath.write_text(text)
+
+        # An error stopped the optimization, e.g. an engine that could not start:
+        # raise it, with nothing (perhaps not even an energy) to report
+        if exception is not None:
+            self._clean_up_steps(P["on error"])
+            raise exception
 
         # Get the optimized energy & geometry
         if converged:
@@ -687,22 +705,9 @@ format=%(message)s
 
         # Clean up the subdirectories
         wd = self._working_directory
-        if exception is not None or not converged:
-            keep = P["on error"]
-            if keep == "delete all subdirectories":
-                subdirectories = wd.glob("step_*")
-                for subdirectory in subdirectories:
-                    shutil.rmtree(subdirectory)
-            elif keep == "keep last subdirectory":
-                subdirectories = wd.glob("step_*")
-                subdirectories = sorted(subdirectories)
-                for subdirectory in subdirectories[:-1]:
-                    shutil.rmtree(subdirectory)
-            if not converged:
-                raise RuntimeError(
-                    f"Optimization did not converge in {max_steps} steps"
-                )
-            raise exception from None
+        if not converged:
+            self._clean_up_steps(P["on error"])
+            raise RuntimeError(f"Optimization did not converge in {max_steps} steps")
         else:
             keep = P["on success"]
             if keep == "delete all subdirectories":
