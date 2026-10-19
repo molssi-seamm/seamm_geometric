@@ -1,6 +1,11 @@
 =======
 History
 =======
+2026.10.19 -- Bugfix: the error that stopped an optimization was hidden
+    * When an error stopped the optimization, e.g. an engine that could not start,
+      it was reported as an UnboundLocalError, or as not converging, rather than as
+      itself. It is now raised as it is.
+
 2025.5.7 -- Enhancement: Gracefully handle convergence failure
     * Return the latest energy and structure when optimization fails to converge,
       rather than forcing an error.
