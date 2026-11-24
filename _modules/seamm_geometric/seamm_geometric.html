@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>seamm_geometric.seamm_geometric &#8212; SEAMM-geomeTRIC Connector 2026.11.24 documentation</title>
+    <title>seamm_geometric.seamm_geometric &#8212; SEAMM-geomeTRIC Connector 2026.11.24.1 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=76b852d5"></script>
+    <script src="../../_static/documentation_options.js?v=58c8da01"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.24" />
+  <meta name="docsearch:version" content="2026.11.24.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1071,11 +1071,13 @@
 
         <span class="k">if</span> <span class="s2">"Energy change criterion"</span> <span class="ow">in</span> <span class="n">criteria</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">"convergence_energy"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"Energy change criterion"</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"E_h"</span><span class="p">)</span>
+        <span class="c1"># geomeTRIC's gradient criteria are in atomic units (E_h/bohr), its step</span>
+        <span class="c1"># criteria in Å.</span>
         <span class="k">if</span> <span class="s2">"RMS gradient criterion"</span> <span class="ow">in</span> <span class="n">criteria</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"convergence_grms"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"RMS gradient criterion"</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"E_h/Å"</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"convergence_grms"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"RMS gradient criterion"</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"E_h/a_0"</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">"Maximum atomic gradient criterion"</span> <span class="ow">in</span> <span class="n">criteria</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">"convergence_gmax"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"Maximum atomic gradient criterion"</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span>
-                <span class="s2">"E_h/Å"</span>
+                <span class="s2">"E_h/a_0"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="s2">"RMS step criterion"</span> <span class="ow">in</span> <span class="n">criteria</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">"convergence_drms"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"RMS step criterion"</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"Å"</span><span class="p">)</span>
