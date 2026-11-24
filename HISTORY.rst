@@ -5,7 +5,7 @@ History
     * The RMS and maximum gradient criteria were passed to geomeTRIC in E_h/Å, but
       geomeTRIC reads them in E_h/bohr, so a criterion given in other units, such as a
       custom 0.0015 eV/Å, was 1.89 times too loose. They are now converted to E_h/bohr.
-      Needs structure-step 2026.11.24.2 or later, whose presets give their gradient
+      Needs structure-step 2026.11.24.1 or later, whose presets give their gradient
       criteria in E_h/bohr; with older presets geomeTRIC would be 1.89 times too tight.
 
 2026.11.24 -- Bugfix: a custom convergence stopped the optimization before it ran
