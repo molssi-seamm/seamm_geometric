@@ -356,17 +356,20 @@ class geomeTRIC_mixin:
 
         text += " Convergence will be reached when "
         tmp_text = ["\n"]
+        # The parameters' own names (the lower-case names these replaced are not
+        # parameters, so describing a custom convergence raised KeyError)
         criteria = (
-            "energy change criterion",
-            "rms gradient criterion",
-            "atomic gradient criterion",
-            "rms step criterion",
-            "atomic step criterion",
+            "Energy change criterion",
+            "RMS gradient criterion",
+            "Maximum atomic gradient criterion",
+            "RMS step criterion",
+            "Maximum atomic step criterion",
         )
         if self.is_expr(convergence):
             text += "the conditions defined by '{convergence}' are met."
             text += " The formula may use any of the following criteria:"
         elif convergence == "custom":
+            criteria = formula["criteria"]
             if convergence_formula == "E+grad+step":
                 text += "the following conditions are met:"
             else:
