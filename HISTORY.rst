@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.11.24 -- Bugfix: a custom convergence stopped the optimization before it ran
+    * Describing a custom convergence looked up the criteria under names that are not
+      parameters, so any optimization with convergence 'custom' failed with a KeyError
+      before it started. The criteria are now named as the parameters are, and a custom
+      convergence lists its formula's own criteria.
+
 2026.10.19 -- Bugfix: the error that stopped an optimization was hidden
     * When an error stopped the optimization, e.g. an engine that could not start,
       it was reported as an UnboundLocalError, or as not converging, rather than as
