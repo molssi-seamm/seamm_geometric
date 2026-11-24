@@ -598,11 +598,13 @@ format=%(message)s
 
         if "Energy change criterion" in criteria:
             kwargs["convergence_energy"] = P["Energy change criterion"].m_as("E_h")
+        # geomeTRIC's gradient criteria are in atomic units (E_h/bohr), its step
+        # criteria in Å.
         if "RMS gradient criterion" in criteria:
-            kwargs["convergence_grms"] = P["RMS gradient criterion"].m_as("E_h/Å")
+            kwargs["convergence_grms"] = P["RMS gradient criterion"].m_as("E_h/a_0")
         if "Maximum atomic gradient criterion" in criteria:
             kwargs["convergence_gmax"] = P["Maximum atomic gradient criterion"].m_as(
-                "E_h/Å"
+                "E_h/a_0"
             )
         if "RMS step criterion" in criteria:
             kwargs["convergence_drms"] = P["RMS step criterion"].m_as("Å")
