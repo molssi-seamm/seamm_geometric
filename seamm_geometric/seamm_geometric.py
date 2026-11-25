@@ -674,11 +674,14 @@ format=%(message)s
             gradients = customengine.gradient
             self._results["nsteps"] = max_steps
 
-        self._results["maximum_gradient"] = np.max(np.linalg.norm(gradients, axis=1))
-        self._results["rms_gradient"] = np.sqrt(
-            np.mean(np.linalg.norm(gradients, axis=1) ** 2)
-        )
-        if converged:
+        # geomeTRIC's gradients are in E_h/bohr; the results are in kJ/mol/Å
+        # (as the per-step values from geometric_calculate_gradients are)
+        factor = Q_(1.0, "E_h/a_0").m_as("kJ/mol/Å")
+        norms = np.linalg.norm(np.asarray(gradients).reshape(-1, 3), axis=1)
+        self._results["maximum_gradient"] = np.max(norms) * factor
+        self._results["rms_gradient"] = np.sqrt(np.mean(norms**2)) * factor
+        # geomeTRIC's coordinates (m.xyzs) are in Å, as is the maximum step
+        if converged and len(m.xyzs) > 1:
             step = coordinates - m.xyzs[-2].reshape(-1, 3)
             self._results["maximum_step"] = np.max(np.linalg.norm(step, axis=1))
         else:
