@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.11.25 -- Bugfix: the final forces were reported in the wrong units
+    * At the end of an optimization the maximum and RMS forces were reported in
+      geomeTRIC's units, E_h/bohr, but labelled kJ/mol/Å, so they were about 4961 times
+      too small (e.g. "Max Force 0.000016 kJ/mol/Å" for a converged PM7 optimization).
+      They are now converted to kJ/mol/Å, as the forces for each step already were.
+
 2026.11.24.1 -- Bugfix: gradient criteria in geomeTRIC's units
     * The RMS and maximum gradient criteria were passed to geomeTRIC in E_h/Å, but
       geomeTRIC reads them in E_h/bohr, so a criterion given in other units, such as a
